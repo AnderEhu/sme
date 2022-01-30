@@ -1,4 +1,4 @@
-# Entrega software matematico y estadistico: Paquete SME
+# Entrega software matemático y estadístico: Paquete SME
 
 ## Hay cuatro modulos:
 - discretization.R
@@ -6,4 +6,4 @@
 - metrics.R
 - scaling.R
 ## Documentación:
-Cada módulo dispone un viñeta con explicación y ejemplo en la carpeta inst/doc. Además al instalar el paquete se dispone de ayuda mediante ?(funcion)
+Cada módulo dispone un viñeta con explicación y ejemplo en la carpeta inst/doc. Además al instalar el paquete se dispone de ayuda mediante ?(función)
