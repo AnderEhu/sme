@@ -1,0 +1,381 @@
+---
+title: "Metrics and plots functions"
+author: "Ander Alonso"
+date: "`r Sys.Date()`"
+output:
+  prettydoc::html_pretty:
+    theme: cayman
+    highlight: github
+vignette: >
+  %\VignetteIndexEntry{Metrics and plots functions}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+
+```{r}
+library(SME)
+library(knitr)
+```
+
+# variance
+Variance is the expectation of the squared deviation of a random variable from its population mean or sample mean. Variance is a measure of dispersion, meaning it is a measure of how far a set of numbers is spread out from their average value:
+
+$\sigma^2 = \sum_{1}^{n} \frac{(x_i - mean(x))^2}{n-1}$
+
+### Usage
+variance(x, margin = 2L)
+
+### Arguments
+- x	: a numeric vector, matrix, or data.frame.
+- margin: In case of matrix or dataframe apply variance by columns margin = 2L or by rows margin = 1L. Default 2.
+
+### Value
+the sample variance of the input.
+
+### Examples
+```{r}
+example1 <- data.frame("V1" = rep(1, 100), "V2" = 100:1,  "V4" = sample.int(3000,100,replace=FALSE))
+example2 <- rep(1, 100)
+```
+
+```{r}
+v <- variance(example1)
+kable(v)
+v <- variance(example1, margin = 1L)
+print(v)
+v <- variance(example2)
+kable(v)
+```
+
+
+## entropy
+Entropy of a random variable is the average level of "information", "surprise", or "uncertainty" inherent to the variable's possible outcomes. 
+
+$H(X)= -\sum_{1}^{n}P(x_i)log[P(x_i)]$
+
+### Usage
+entropy(x, margin = 2L)
+
+### Arguments
+
+- x	: a numeric vector, matrix, or data.frame.
+
+- margin: In case of matrix or dataframe apply entropy by columns margin = 2L or by rows margin = 1L. Default 2.
+
+### Value
+the sample entropy of the input.
+
+### Examples
+
+```{r}
+col1 <-  c('False', 'False', 'True', 'True', 'True', 'True', 'False', 'True', 'False', 'False')
+col2 <- c('True', 'False', 'False', 'False', 'True', 'True', 'False', 'False', 'False', 'False')
+col3 <- c('a', 'b', 'c', 'a', 'a', 'a', 'l', 'a', 'l', 'a')
+df <- data.frame("V1" = col1, "V2" = col2, "V3" = col3)
+```
+
+```{r}
+e <- entropy(df)
+kable(e)
+```
+
+
+# conditional.entropy
+
+Conditional entropy quantifies the amount of information needed to describe the outcome of a random variable  Y given that the value of another random variable X is known.
+
+$H(X|Y) = -\sum\sum p(x,y)log[\frac{p(x,y)}{p(x)}]$
+
+### Usage
+conditional.entropy(x, y = NULL, file = "None")
+
+### Arguments
+
+- x: a vector, matrix, or data.frame.
+- y: a vector. y must be NULL if x is a matrix or a data.frame
+- file: In case of x been a data.frame or matrix, represent the name of output file for saving conditional entropy plot
+
+
+### Value
+In case of x been a data.frame or matrix, conditional entropy of all variables/columns in x. Otherwise, conditional entropy of x and y.
+
+### Examples
+```{r}
+df <- data.frame("V1" = sample.int(2,5,replace=TRUE), "V2" =sample.int(2,5,replace=TRUE) , "V3" = sample.int(2,5,replace=TRUE), "V4" = sample.int(2,5,replace=TRUE),  "V5" = sample.int(2,5,replace=TRUE), "V6" = sample.int(2,5,replace=TRUE), "V7" = sample.int(2,5,replace=TRUE), "V8" = sample.int(2,5,replace=TRUE))
+x <- sample.int(2, 5,replace=TRUE)
+y <- sample.int(2,5,replace=TRUE)
+```
+
+```{r}
+c <- conditional.entropy(df, file ="conditionalEntropy")
+kable(c)
+```
+<img src="conditionalEntropy.jpg" width="700" height="700">
+```{r}
+c <- conditional.entropy(x = x, y = y)
+kable(c)
+```
+
+# joint.entropy
+
+Joint entropy is a measure of the uncertainty associated with a set of variables.
+
+$H(X, Y) = - \sum\sum p(x, y)log[p(x,y)]$
+
+### Usage
+joint.entropy(x, y = NULL, file = "None")
+
+### Arguments
+- x: a vector, matrix, or data.frame.
+- y: a vector. y must be NULL if x is a matrix or a data.frame.
+- file: In case of x been a data.frame or matrix, represent the name of output file for saving joint entropy plot.
+
+### Value
+In case of x been a data.frame or matrix, joint entropy of all variables/columns in x. Otherwise, joint entropy of x and y.
+
+### Examples
+```{r}
+df <- data.frame("V1" = sample.int(2,5,replace=TRUE), "V2" =sample.int(2,5,replace=TRUE) , "V3" = sample.int(2,5,replace=TRUE), "V4" = sample.int(2,5,replace=TRUE),  "V5" = sample.int(2,5,replace=TRUE), "V6" = sample.int(2,5,replace=TRUE), "V7" = sample.int(2,5,replace=TRUE), "V8" = sample.int(2,5,replace=TRUE))
+x <- sample.int(2, 5,replace=TRUE)
+y <- sample.int(2, 5,replace=TRUE)
+```
+
+```{r}
+j <- joint.entropy(df, file ="jointEntropy")
+kable(j)
+```
+<img src="jointEntropy.jpg" width="700" height="700">
+```{r}
+j <- joint.entropy(x = x, y = y)
+kable(j)
+```
+
+# mutual.information
+
+Mutual information (MI) of two random variables is a measure of the mutual dependence between the two variables. More specifically, it quantifies the "amount of information" (in units such as shannons (bits), nats or hartleys) obtained about one random variable by observing the other random variable.
+
+$I(X, Y) = \sum\sum p(x, y)log[\frac{p(x,y)}{p(x)p(y)}]$
+
+$I(X, Y) = H(X) - H(X|Y) 
+        =  H(Y) - H(Y|X) = H(X) + H(Y) - H(X, Y) = H(X, Y) - H(X|Y) - H(Y|X)$
+        
+### Usage
+mutual.information(x, y = NULL, file = "None")
+
+### Arguments
+
+- x: a vector, matrix, or data.frame.
+- y: a vector. y must be NULL if x is a matrix or a data.frame.
+- file: In case of x been a data.frame or matrix, represent the name of output file for saving mutual information plot.
+
+### Value
+In case of x been a data.frame or matrix, mutual information of all variables/columns in x. Otherwise, mutual information of x and y.
+
+### Examples
+```{r}
+df <- data.frame("V1" = sample.int(2,5,replace=TRUE), "V2" =sample.int(2,5,replace=TRUE) , "V3" = sample.int(2,5,replace=TRUE), "V4" = sample.int(2,5,replace=TRUE),  "V5" = sample.int(2,5,replace=TRUE), "V6" = sample.int(2,5,replace=TRUE), "V7" = sample.int(2,5,replace=TRUE), "V8" = sample.int(2,5,replace=TRUE))
+x <- sample.int(2, 5,replace=TRUE)
+y <- sample.int(2, 5,replace=TRUE)
+```
+
+
+```{r}
+m <- mutual.information(df, file ="mutualInformation")
+kable(m)
+```
+<img src="jointEntropy.jpg" width="700" height="700">
+```{r}
+m <- mutual.information(x = x, y = y)
+kable(m)
+```
+
+# correlation
+
+Correlation is a statistic that measures the degree to which two variables move in relation to each other.
+
+Pearson correlation, $r_{pearson}$ It is the ratio between the covariance of two variables and the product of their standard deviations;
+
+$r_{pearson} = \frac{Cov(x,y)}{\sigma(x)\sigma(y)}$
+
+Spearman correlation, $r_{spearman}$,  is a nonparametric measure of rank correlation (statistical dependence between the rankings of two variables)
+
+$r_{spearman} = 1 - \frac{6\sum d_i^2}{n(n^2-1)}$
+
+### Usage
+correlation(x, y = NULL, method = "Pearson", file = "None")
+
+### Arguments
+
+- x	a numeric vector, matrix, or data.frame.
+- y	a numeric vector. y must be NULL if x is a matrix or a data.frame.
+- method	Pearson or Spearman method for calculate correlation. Default Pearson.
+- file In case of x been a data.frame or matrix, represent the name of output file for saving mutual information plot.
+
+### Value
+In case of x been a data.frame or matrix, correlation of all variables/columns in x. Otherwise, correlation of x and y.
+
+### Examples
+```{r}
+df <- data.frame("V1" = sample.int(3000,100,replace=FALSE), "V2" =sample.int(3000,100,replace=FALSE) , "V3" = sample.int(3000,100,replace=FALSE), "V4" = sample.int(3000,100,replace=FALSE),  "V5" = sample.int(3000,100,replace=FALSE), "V6" = sample.int(3000,100,replace=FALSE), "V7" = sample.int(3000,100,replace=FALSE), "V8" = sample.int(3000,100,replace=FALSE))
+x <- c(35,23,47, 17, 10, 43, 9, 6, 28)
+y <- c(30, 33, 45, 23, 8, 49, 12, 4, 31)
+```
+
+
+```{r}
+correlation(x = x, y = y, method = "Pearson")
+correlation(x = x, y = y, method = "Spearman")
+correlation(x = df, method = "Pearson")
+correlation(x = df, method = "Spearman")
+```
+
+```{r}
+correlation(x = df, method = "Pearson", file = "pearsonCor")
+```
+
+<img src="pearsonCor.jpg" width="700" height="700">
+
+```{r}
+correlation(x = df, method = "Spearman", file = "spearmanCor")
+```
+<img src="spearmanCor.jpg" width="700" height="700">
+
+# roc_curve
+
+
+The Receiver Operator Characteristic (ROC) curve is an evaluation metric for binary classification problems (can also be applied to a variable). It is a probability curve that plots the TPR against FPR.
+
+The higher the AUC, the better the performance of the variable.
+
+### Usage
+roc.curve(x, y, file = "None", AUC = FALSE)
+
+### Arguments
+
+- x:	a numerical vector
+- y: represent logical class TRUE/FALSE.
+- file: name of output file for saving roc curve plot.
+- AUC: return auc value AUC = TRUE
+
+#### Value
+dataframe wih TPR and FPR or AUC value
+
+#### Examples
+
+
+```{r}
+random.x <- sample.int(3000,1000,replace=FALSE)
+class <- c(rep(TRUE, 500), rep(FALSE, 500))
+pos <- sample.int(1000, 1000)
+random.y <- class[order(pos)]
+perfect.x <- 1:3000
+perfect.y <- c(rep(TRUE, 1500), rep(FALSE, 1500))
+
+worst.x <- 1:3000
+worst.y <- c(rep(FALSE, 1500), rep(TRUE, 1500))
+```
+
+
+```{r}
+randomRocCurve <- roc.curve(random.x, random.y, file= "randomRocCurve")
+```
+<img src="randomRocCurve.jpg" width="700" height="700">
+
+```{r}
+perfectRocCurve <- roc.curve(perfect.x, perfect.y, file= "perfectRocCurve")
+```
+<img src="perfectRocCurve.jpg" width="700" height="700">
+```{r}
+worstRocCurve <- roc.curve(worst.x, worst.y, file= "worstRocCurve")
+```
+<img src="worstRocCurve.jpg" width="700" height="700">
+
+# filter 
+
+Given a dataframe, a metric, an upper limit and a lower limit return a filtered dataframe with the specified metric that satisfies the upper and lower bounds. For AUC metric it is required to specified class name.
+
+#### Usage
+filter(
+  df,
+  class,
+  by = "AUC",
+  uplimit = .Machine$integer.max,
+  lowlimit = -.Machine$integer.max
+)
+### Arguments
+
+- df data.frame. Each colum represent a variable
+- class name of the class variable
+- by metric to apply the filter. AUC, Variance and Entropy are available.
+- uplimit	metric uplimit value
+- lowlimit metric uplimit value. Default
+
+### Value
+Filtered data.frame
+
+### Examples
+```{r}
+class <- c(rep(TRUE, 5), rep(FALSE, 5))
+pos <- sample.int(10, 10)
+random.y <- class[order(pos)]
+df.numeric <- data.frame("V1" = sample.int(3,10,replace=TRUE), "V2" = sample.int(3,10,replace=TRUE), "V3" = sample.int(3,10,replace=TRUE), "Class" =  random.y)
+df.cat <- data.frame("V1" = as.factor(sample.int(3,10,replace=TRUE)), "V2" =  as.factor(sample.int(3,10,replace=TRUE)),  "V4" =  as.factor(sample.int(3,10,replace=TRUE)), "Class" =  random.y)
+```
+
+
+```{r}
+filter(df.numeric, class = "Class", by = "AUC", uplimit = 1, lowlimit = 0.5)
+filter(df.numeric, class = "Class", by = "Variance", uplimit = 100, lowlimit = 0)
+filter(df.cat, class = "Class", by = "Entropy", uplimit = 2, lowlimit = 0)
+filter(df.cat, class = "Class", by = "Entropy")
+```
+
+# visualize.infotheo.matrix
+Heatmap plot of theory information metrics
+
+### Usage
+
+visualize.infotheo.matrix(
+  df,
+  type,
+  file = "None",
+  colors = c("#DEB841", "white", "#267278")
+)
+
+### Arguments
+
+df: Conditional Entropy, Joint Entropy or Mutual Information data.frame or matrix.
+
+type: Type of theory information metric. Character
+
+file: In case you want to save the plot, file represents output file name.
+
+colors: Three colors for the gradient. Default c("#DEB841", "white", "#267278").
+
+
+### Value
+Heatmap of given dataframe
+
+### Example
+
+```{r}
+df <- data.frame("V1" = sample.int(2,5,replace=TRUE), "V2" =sample.int(2,5,replace=TRUE) , "V3" = sample.int(2,5,replace=TRUE), "V4" = sample.int(2,5,replace=TRUE),  "V5" = sample.int(2,5,replace=TRUE), "V6" = sample.int(2,5,replace=TRUE), "V7" = sample.int(2,5,replace=TRUE), "V8" = sample.int(2,5,replace=TRUE))
+ce <- conditional.entropy(df)
+je <- joint.entropy(df)
+mi <- mutual.information(df)
+```
+
+```{r}
+p <- visualize.infotheo.matrix(ce, type = "Conditional Entropy", colors = c("#692be2", "White", "#ddcbff"))
+print(p)
+
+p <- visualize.infotheo.matrix(je, type = "Joint Entropy", colors = c("#9999ff", "#6b7db3", "#6bb3b3"))
+print(p)
+
+p <- visualize.infotheo.matrix(je, type = "Mutual Information", colors = c("#ffd699", "White", "#b3966b"))
+print(p)
+```
+
+
+

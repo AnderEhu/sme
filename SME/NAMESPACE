@@ -1,0 +1,19 @@
+export(
+  conditional.entropy,
+  correlation,
+  discretize,
+  entropy,
+  filter,
+  joint.entropy,
+  mutual.information,
+  normalize,
+  visualize.correlation.matrix,
+  visualize.infotheo.matrix,
+  visualize.roc.curve,
+  read.df,
+  roc.curve,
+  standardize,
+  variance,
+  write.df,
+  auc
+)

@@ -1,0 +1,15 @@
+Package: SME
+Type: Package
+Title: What the Package Does (Title Case)
+Version: 0.1.0
+Author: Ander Alonso
+Maintainer: Ander Alonso <aalonso213@ikasle.ehu.eus>
+Suggests: ggplot2, reshape2, rmarkdown, knitr
+Description: Entrega final software matematico y estadistico
+License: 0.1
+Encoding: UTF-8
+BuildVignettes: TRUE
+VignetteBuilder: knitr, rmarkdown
+RoxygenNote: 7.1.2
+NeedsCompilation: no
+Packaged: 2022-01-30 17:20:00 UTC; ander

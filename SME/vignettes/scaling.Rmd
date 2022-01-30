@@ -1,0 +1,125 @@
+---
+title: "Scaling functions"
+author: "Ander Alonso"
+date: "`r Sys.Date()`"
+output:
+  prettydoc::html_pretty:
+    theme: cayman
+    highlight: github
+vignette: >
+  %\VignetteIndexEntry{Scaling functions}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r}
+library(SME)
+library(knitr)
+```
+
+```{r}
+df <- data.frame("V1" = 1:3, "V2" = 3:5, "V3" = 5:7)
+v <- c(1, 3, 5)
+m <- matrix(c(1,2,3,3,4,5,5,6,7), ncol = 3, byrow = FALSE)
+```
+
+# normalize
+The goal of normalization is to transform features to be on a similar scale, implemented method is max-min normalization:
+
+$x_{normalize} = \frac{x - min(x)}{max(x)-min(x)}$
+
+Currently implemented for numeric vectors, numeric matrices and data.frame normalization.
+
+### Usage
+normalize(x, margin = 1L)
+
+### Arguments
+- x numeric, matrix or dataframe input vector.
+- sep Field separator. Default ;
+- margin 1 - normalize by rows and 2 - normalize by columns. Default is 1.
+
+### Value
+- A normalized numeric or data.frame.
+
+### Examples 
+
+```{r}
+s1 <- normalize(df, margin = 1L)
+kable(s1)
+```
+
+
+```{r}
+s2 <- normalize(df, margin = 2L)
+kable(s2)
+```
+
+
+```{r}
+s3 <- normalize(m, margin = 1L)
+kable(s3)
+```
+
+
+```{r}
+s4 <- normalize(m, margin = 2L)
+kable(s4)
+```
+
+```{r}
+s5 <- normalize(v)
+kable(s5)
+```
+
+
+
+# standardize
+
+Standardization rescales data to have a mean (μ) of 0 and standard deviation (σ) of 1 (unit variance).
+
+$x_{standardize} = \frac{x-mean(x)}{\sigma (x)}$
+
+Currently implemented for numeric vectors, numeric matrices and data.frame standardization.
+
+### Usage
+standardize(x, margin = 1L)
+
+### Arguments
+- x numeric, matrix or dataframe input vector.
+- margin 1 - standardize by rows and 2 - standardize by columns. Default is 1
+
+### Value
+A standardize numeric or data.frame.
+
+### Examples 
+
+```{r}
+s1 <- standardize(df, margin = 1L)
+kable(s1)
+```
+
+
+```{r}
+s2 <- standardize(df, margin = 2L)
+kable(s2)
+```
+
+
+```{r}
+s3 <- standardize(m, margin = 1L)
+kable(s3)
+```
+
+
+```{r}
+s4 <- standardize(m, margin = 2L)
+kable(s4)
+```
+
+```{r}
+s5 <- standardize(v)
+kable(s5)
+```
+
+
+

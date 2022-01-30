@@ -1,0 +1,89 @@
+---
+title: "Discretize functions"
+author: "Ander Alonso"
+date: "`r Sys.Date()`"
+output:
+  prettydoc::html_pretty:
+    theme: cayman
+    highlight: github
+vignette: >
+  %\VignetteIndexEntry{Discretize functions}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+
+```{r}
+library(SME)
+library(knitr)
+```
+
+# discretize
+
+Discretization is the process of transforming a continuous-valued variable into a discrete one by creating a set of contiguous intervals (or equivalently a set of cutpoints) that spans the range of the variable's values. 
+
+There are diferent discretization methods, for example:
+
+- Equal interval width discretization: all bins have equal width.
+- Equal frequency discretization: all bins contain the same number of numerical values.
+- k-means discretization:  consists of applying the classical K-means clustering to one-dimensional continuous data, k is equal to the number of bins.
+
+### Usage
+discretize(x, method = "frequency", num.bins)
+
+### Arguments
+- x a numeric vector, matrix or dataframe (continuous variables)
+- method discretization method. Available are: "interval" (equal interval width), "frequency" (equal frequency), "cluster" (k-means clustering).
+- num.bins number of intervals.
+
+
+### Value
+A discretized vector or dataframe
+
+### Examples
+```{r}
+v.example.1 <- c(11.5, 10.2, 1.2, 0.5, 5.3, 20.5, 8.4)
+v.example.2 <- c(0,4,12,16,16,18,24,26,28)
+df.example.3 <- data.frame(c(0,4,12), c(16,16,18), c(24,26,28))
+matrix.example.4 <- matrix(c(0,4,12,16,16,18,24,26,28), 3, 3, byrow = FALSE )
+```
+
+```{r}
+ew.discretize.example1 <- discretize(v.example.1, method="interval", 4)
+print(ew.discretize.example1)
+
+ew.discretize.example2 <- discretize(v.example.2, method="interval", 3)
+print(ew.discretize.example2)
+
+ew.discretize.example3 <- discretize(df.example.3, method="interval", 3)
+kable(ew.discretize.example3)
+
+ew.discretize.example4 <- discretize(matrix.example.4, method="interval", 2)
+kable(ew.discretize.example4)
+
+ef.discretize.example1 <- discretize(v.example.1, method="frequency", 4)
+print(ef.discretize.example1)
+
+ef.discretize.example2 <- discretize(v.example.2, method="frequency", 3)
+print(ef.discretize.example2)
+
+ef.discretize.example3 <- discretize(df.example.3, method="frequency", 3)
+kable(ef.discretize.example3)
+
+ef.discretize.example4 <- discretize(matrix.example.4, method="frequency", 2)
+kable(ef.discretize.example4)
+
+
+clustering.discretize.example1 <- discretize(v.example.1, method="clustering", 4)
+print(clustering.discretize.example1)
+
+clustering.discretize.example2 <- discretize(v.example.2, method="clustering", 3)
+print(clustering.discretize.example2)
+
+clustering.discretize.example3 <- discretize(df.example.3, method="clustering", 3) 
+kable(clustering.discretize.example3)
+
+clustering.discretize.example4 <- discretize(matrix.example.4, method="clustering", 2)   
+kable(clustering.discretize.example4)
+```
+
